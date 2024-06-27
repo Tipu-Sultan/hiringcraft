@@ -1,7 +1,7 @@
 // components/Header.js
 
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Avatar } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/userSlice';
 import { Link } from 'react-router-dom';
@@ -19,15 +19,16 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Avatar src={hiringcraft} alt="HiringCraft Logo" sx={{ marginRight: 2 }} />
-        <Typography 
-          component={Link} 
-          to="/" 
-          variant="h6" 
-          style={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
-        >
-          HiringCraft
-        </Typography>
+        <Box display="flex" alignItems="center" sx={{ marginRight: 2 }}>
+          <img
+            component={Link}
+            to="/"
+            variant="h6"
+            style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px' }}
+            src={hiringcraft} alt="HiringCraft Logo"
+          />
+        </Box>
+        <Box sx={{ flexGrow: 1 }} />
         {userInfo ? (
           <>
             {userInfo.role === 'employer' && (
