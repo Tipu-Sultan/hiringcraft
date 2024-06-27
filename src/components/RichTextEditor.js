@@ -21,7 +21,7 @@ const RichTextEditor = ({ value, onChange }) => {
     <Editor
       onInit={(evt, editor) => (editorRef.current = editor)}
       initialValue={value || ''}
-      apiKey="c2j38nas64n4hpeke9u8fvf25ykj41nhnvqqxqp23gkxjvl4"
+      apiKey={process.env.EditorAPI_KEY}
       init={{
         height: 300,
         menubar: true,

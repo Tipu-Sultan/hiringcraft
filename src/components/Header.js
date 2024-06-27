@@ -19,11 +19,8 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Box display="flex" alignItems="center" sx={{ marginRight: 2 }}>
+        <Box component={Link} to="/" display="flex" alignItems="center" sx={{ marginRight: 2 }}>
           <img
-            component={Link}
-            to="/"
-            variant="h6"
             style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px' }}
             src={hiringcraft} alt="HiringCraft Logo"
           />
