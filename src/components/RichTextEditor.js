@@ -24,7 +24,7 @@ const RichTextEditor = ({ value, onChange }) => {
       apiKey="c2j38nas64n4hpeke9u8fvf25ykj41nhnvqqxqp23gkxjvl4"
       init={{
         height: 300,
-        menubar: false,
+        menubar: true,
         plugins: [
           'advlist autolink lists link image',
           'charmap print preview anchor help',
