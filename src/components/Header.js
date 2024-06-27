@@ -1,58 +1,167 @@
-// components/Header.js
-
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Button, Box, IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/userSlice';
 import { Link } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import hiringcraft from '../assets/hiringcraft.png';
 
 const Header = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = '/login';
   };
 
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const menuItems = (
+    <>
+      {userInfo ? (
+        <>
+          {userInfo.role === 'employer' && (
+            <>
+              <ListItem button component={Link} to="/create-job">
+                <ListItemText primary="Create Job" />
+              </ListItem>
+              <ListItem button component={Link} to="/posted-jobs">
+                <ListItemText primary="Posted Jobs" />
+              </ListItem>
+              <Divider />
+            </>
+          )}
+          <ListItem button component={Link} to={`/profile/${userInfo._id}`}>
+            <ListItemText primary="Profile" />
+          </ListItem>
+          <ListItem button onClick={handleLogout}>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        </>
+      ) : (
+        <>
+          <ListItem button component={Link} to="/login">
+            <ListItemText primary="Login" />
+          </ListItem>
+          <ListItem button component={Link} to="/register">
+            <ListItemText primary="Register" />
+          </ListItem>
+        </>
+      )}
+    </>
+  );
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#3f51b5' }}>
       <Toolbar>
-        <Box component={Link} to="/" display="flex" alignItems="center" sx={{ marginRight: 2 }}>
+        <Box display="flex" alignItems="center" sx={{ marginRight: 2 }}>
           <img
-            style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px' }}
-            src={hiringcraft} alt="HiringCraft Logo"
+            component={Link}
+            to="/"
+            style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px', cursor: 'pointer' }}
+            src={hiringcraft}
+            alt="HiringCraft Logo"
           />
         </Box>
         <Box sx={{ flexGrow: 1 }} />
-        {userInfo ? (
+        {isMobile ? (
           <>
-            {userInfo.role === 'employer' && (
-              <>
-                <Button color="inherit" component={Link} to="/create-job">
-                  Create Job
-                </Button>
-                <Button color="inherit" component={Link} to="/posted-jobs">
-                  Posted Jobs
-                </Button>
-              </>
-            )}
-            <Button color="inherit" component={Link} to={`/profile/${userInfo._id}`}>
-              Profile
-            </Button>
-            <Button color="inherit" onClick={handleLogout}>
-              Logout
-            </Button>
+            <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+              <List onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+                {menuItems}
+              </List>
+            </Drawer>
           </>
         ) : (
           <>
-            <Button color="inherit" component={Link} to="/login">
-              Login
-            </Button>
-            <Button color="inherit" component={Link} to="/register">
-              Register
-            </Button>
+            {userInfo ? (
+              <>
+                {userInfo.role === 'employer' && (
+                  <>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="/create-job"
+                      sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
+                    >
+                      Create Job
+                    </Button>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="/posted-jobs"
+                      sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
+                    >
+                      Posted Jobs
+                    </Button>
+                  </>
+                )}
+                <IconButton
+                  edge="end"
+                  color="inherit"
+                  aria-controls="profile-menu"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  sx={{ '&:hover': { backgroundColor: '#303f9f' } }}
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="profile-menu"
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem component={Link} to={`/profile/${userInfo._id}`}>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/login"
+                  sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
+                >
+                  Login
+                </Button>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/register"
+                  sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' } }}
+                >
+                  Register
+                </Button>
+              </>
+            )}
           </>
         )}
       </Toolbar>
