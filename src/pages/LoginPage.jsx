@@ -11,6 +11,8 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useUserAuth } from '../hooks/userAuthHooks';
 import { Link } from 'react-router-dom';
+import hiringcraft from '../assets/hiringcraft.png';
+
 
 const LoginPage = () => {
   const {
@@ -42,6 +44,11 @@ const LoginPage = () => {
         justifyContent="center"
         minHeight="100vh"
       >
+        <img
+            style={{height: '40px', marginRight: '8px', cursor: 'pointer' }}
+            src={hiringcraft}
+            alt="HiringCraft Logo"
+          />
         <Typography variant="h4" component="h1" gutterBottom>
           Login
         </Typography>

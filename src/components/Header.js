@@ -78,13 +78,13 @@ const Header = () => {
     <AppBar position="static" sx={{ backgroundColor: '#3f51b5' }}>
       <Toolbar>
         <Box display="flex" alignItems="center" sx={{ marginRight: 2 }}>
+          <a href='/'>
           <img
-            component={Link}
-            to="/"
             style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px', cursor: 'pointer' }}
             src={hiringcraft}
             alt="HiringCraft Logo"
           />
+          </a>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
         {isMobile ? (
@@ -107,7 +107,7 @@ const Header = () => {
                     <Button
                       color="inherit"
                       component={Link}
-                      to="/create-job"
+                      to="job/create-job"
                       sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
                     >
                       Create Job
@@ -115,7 +115,7 @@ const Header = () => {
                     <Button
                       color="inherit"
                       component={Link}
-                      to="/posted-jobs"
+                      to="jobs/posted-jobs"
                       sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
                     >
                       Posted Jobs

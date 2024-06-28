@@ -19,7 +19,7 @@ export const fetchJobspostedBy = createAsyncThunk('jobs/fetchJobspostedBy', asyn
                 },
             };
     try {
-        const { data } = await axios.get(`${process.env.REACT_APP_API_HOST}/api/jobs/${postedBy}`,config);
+        const { data } = await axios.get(`${process.env.REACT_APP_API_HOST}/api/jobs/postedBy/${postedBy}`,config);
         return data;
     } catch (error) {
         return rejectWithValue(error.response.data.message);

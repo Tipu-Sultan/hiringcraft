@@ -15,6 +15,7 @@ import { registerUser } from '../services/userService';
 import { Link } from 'react-router-dom';
 import checkPassword from '../utils/checkPassword'; // Import checkPassword utility
 import PasswordValidateHint from '../components/PasswordValidateHint';
+import hiringcraft from '../assets/hiringcraft.png';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -72,6 +73,11 @@ const RegisterPage = () => {
         justifyContent="center"
         minHeight="100vh"
       >
+        <img
+            style={{height: '40px', marginRight: '8px', cursor: 'pointer' }}
+            src={hiringcraft}
+            alt="HiringCraft Logo"
+          />
         <Typography variant="h4" component="h1" gutterBottom>
           Register
         </Typography>
