@@ -16,6 +16,7 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import PostedJobsPage from './pages/PostedJobsPage'; // Import PostedJobsPage component
 import ViewApplicantsPage from './pages/ViewApplicantsPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import AppliedJobsPage from './pages/AppliedJobsPage';
 
 const App = () => {
 
@@ -48,6 +49,9 @@ const App = () => {
           </Route>
           <Route path="jobs/posted-jobs" element={<PrivateRoute roles={['employer']} />}>
             <Route index element={<PostedJobsPage />} />
+          </Route>
+          <Route path="jobs/applied-jobs" element={<PrivateRoute roles={['normal']} />}>
+            <Route index element={<AppliedJobsPage />} />
           </Route>
         </Route>
       </Routes>

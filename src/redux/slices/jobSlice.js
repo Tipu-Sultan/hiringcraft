@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { applyJob, createJob, deleteJob, fetchJobById, fetchJobs, updateJob, fetchJobApplicants, fetchJobspostedBy } from '../../services/jobService';
+import { applyJob, createJob, deleteJob, fetchJobById, fetchJobs, updateJob, fetchJobApplicants, fetchJobspostedBy, fetchAppliedJobs } from '../../services/jobService';
 
 const jobSlice = createSlice({
   name: 'jobs',
@@ -67,9 +67,10 @@ const jobSlice = createSlice({
       .addCase(applyJob.pending, (state) => {
         state.loading = true;
       })
-      .addCase(applyJob.fulfilled, (state) => {
+      .addCase(applyJob.fulfilled, (state,action) => {
         state.loading = false;
-        state.error = null; 
+        state.error = null;
+        state.jobs.applicants.push(action.payload.applicant);
       })
       .addCase(applyJob.rejected, (state, action) => {
         state.loading = false;
@@ -88,17 +89,20 @@ const jobSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(fetchJobApplicants.pending, (state) => {
+      
+
+      .addCase(fetchAppliedJobs.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchJobApplicants.fulfilled, (state, action) => {
+      .addCase(fetchAppliedJobs.fulfilled, (state, action) => {
         state.loading = false;
-        state.applicants = action.payload;
+        state.appliedJobs = action.payload;
       })
-      .addCase(fetchJobApplicants.rejected, (state, action) => {
+      .addCase(fetchAppliedJobs.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      ;
   },
 });
 

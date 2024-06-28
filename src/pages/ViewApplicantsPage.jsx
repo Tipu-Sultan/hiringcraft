@@ -6,7 +6,6 @@ import { useApplicants } from '../hooks/useApplicants';
 const ViewApplicantsPage = () => {
   const { jobId } = useParams();
   const { applicants, loading, error } = useApplicants(jobId);
-
   if (loading) {
     return (
       <Container sx={{ marginTop: 4 }}>
@@ -39,7 +38,7 @@ const ViewApplicantsPage = () => {
                   {applicant.name}
                 </Typography>
                 <Typography gutterBottom>{applicant.email}</Typography>
-                <Typography>{applicant.location}</Typography>
+                <Typography>{applicant.address}</Typography>
               </CardContent>
               <Button
                 component={Link}

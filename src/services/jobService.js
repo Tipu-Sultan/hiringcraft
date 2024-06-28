@@ -45,6 +45,25 @@ export const fetchJobApplicants = createAsyncThunk('jobs/fetchJobApplicants',asy
     }
 );
 
+export const fetchAppliedJobs = createAsyncThunk('jobs/fetchJobApplicants',async (userId, { rejectWithValue }) => {
+    try {
+        const { token } = JSON.parse(localStorage.getItem('userInfo'));
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        const { data } = await axios.get(
+            `${process.env.REACT_APP_API_HOST}/api/jobs/${userId}/applied`,
+            config
+        );
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response.data.message);
+    }
+}
+);
+
 export const createJob = createAsyncThunk('jobs/createJob', async (jobData, { rejectWithValue }) => {
     try {
         const { token } = JSON.parse(localStorage.getItem('userInfo'));

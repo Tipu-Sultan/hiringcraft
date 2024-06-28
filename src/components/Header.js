@@ -122,6 +122,18 @@ const Header = () => {
                     </Button>
                   </>
                 )}
+                {userInfo.role === 'normal' && (
+                  <>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="jobs/applied-jobs"
+                      sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
+                    >
+                      Applied Jobs
+                    </Button>
+                  </>
+                )}
                 <IconButton
                   edge="end"
                   color="inherit"
