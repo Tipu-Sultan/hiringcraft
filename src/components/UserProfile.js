@@ -40,8 +40,8 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
   };
 
   return (
-    <Grid container spacing={3} style={{ padding: '20px' }}>
-      <Grid item xs={12} sm={6} md={4}>
+    <Grid spacing={4} style={{ padding: '20px', marginBottom: '10px' }}>
+      <Grid item xs={12} sm={6} md={4} mb={2}>
         <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
           <Avatar
             src={profileInfo?.avatar || ''}
@@ -50,13 +50,19 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
           >
             {profileInfo?.name ? profileInfo.name.charAt(0).toUpperCase() : 'U'}
           </Avatar>
-          <Typography variant="h5" component="h2" gutterBottom style={{ marginTop: '20px' }}>
+          <Typography variant="h5" component="h2" gutterBottom style={{ marginTop: '20px', fontWeight: 'bold' }}>
             {profileInfo?.name}
           </Typography>
           <Divider style={{ marginBottom: '20px' }} />
-          <Typography variant="subtitle1">Name: {profileInfo?.name}</Typography>
-          <Typography variant="body2">Email: {profileInfo?.email}</Typography>
-          <Typography variant="body2">Address: {profileInfo?.address}</Typography>
+          <Typography variant="subtitle1" style={{ fontWeight: 'bold', marginBottom: '10px' }}>
+            Name: {profileInfo?.name}
+          </Typography>
+          <Typography variant="body1" style={{ marginBottom: '5px' }}>
+            <strong>Email:</strong> {profileInfo?.email}
+          </Typography>
+          <Typography variant="body1" style={{ marginBottom: '20px' }}>
+            <strong>Address:</strong> {profileInfo?.address}
+          </Typography>
           {userProfileFormStatus && (
             <UserProfileForm userProfileData={userProfileData} setUserProfileFormStatus={setUserProfileFormStatus} />
           )}
@@ -71,8 +77,9 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
             </Button>
           )}
         </Paper>
+
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} mb={2}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h5" component="h2" gutterBottom>
             Education
@@ -100,7 +107,7 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
               </div>
             ))}
           {checkEducationFormStatus && (
-            <EducationForm setCheckEducationFormStatus={setCheckEducationFormStatus}/>
+            <EducationForm setCheckEducationFormStatus={setCheckEducationFormStatus} />
           )}
           {userInfo?._id === userId && !checkEducationFormStatus && (
             <Button
@@ -114,7 +121,7 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
           )}
         </Paper>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} mb={2}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h5" component="h2" gutterBottom>
             Projects
@@ -141,7 +148,7 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
               </div>
             ))}
           {checkProjectFormStatus && (
-            <ProjectForm setCheckProjectFormStatus={setCheckProjectFormStatus}/>
+            <ProjectForm setCheckProjectFormStatus={setCheckProjectFormStatus} />
           )}
           {userInfo?._id === userId && !checkProjectFormStatus && (
             <Button
@@ -155,7 +162,7 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
           )}
         </Paper>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} mb={2}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h5" component="h2" gutterBottom>
             Experience

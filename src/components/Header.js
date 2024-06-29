@@ -45,19 +45,27 @@ const Header = () => {
         <>
           {userInfo.role === 'employer' && (
             <>
-              <ListItem button component={Link} to="/create-job">
+              <ListItem  component={Link} to="/create-job">
                 <ListItemText primary="Create Job" />
               </ListItem>
-              <ListItem button component={Link} to="/posted-jobs">
+              <ListItem  component={Link} to="/posted-jobs">
                 <ListItemText primary="Posted Jobs" />
               </ListItem>
               <Divider />
             </>
           )}
-          <ListItem button component={Link} to={`/profile/${userInfo._id}`}>
+          {userInfo.role === 'normal' && (
+            <>
+              <ListItem  component={Link} to="jobs/applied-jobs">
+                <ListItemText primary="Applied Jobs" />
+              </ListItem>
+              <Divider />
+            </>
+          )}
+          <ListItem  component={Link} to={`/profile/${userInfo._id}`}>
             <ListItemText primary="Profile" />
           </ListItem>
-          <ListItem button onClick={handleLogout}>
+          <ListItem  onClick={handleLogout}>
             <ListItemText primary="Logout" />
           </ListItem>
         </>
