@@ -78,6 +78,7 @@ export const updateUserExperianceProfile = createAsyncThunk('user/updateUserProf
         return rejectWithValue(error.response.data.message);
     }
 });
+
 export const handlerExperianceDelete = createAsyncThunk('user/handlerExperianceDelete/education', async (exId, { rejectWithValue }) => {
     try {
         const { token } = JSON.parse(localStorage.getItem('userInfo'));
@@ -107,6 +108,7 @@ export const updateUserProjectProfile = createAsyncThunk('user/updateUserProfile
         return rejectWithValue(error.response.data.message);
     }
 });
+
 export const handlerProjectDelete = createAsyncThunk('user/handlerProjectDelete/education', async (proId, { rejectWithValue }) => {
     try {
         const { token } = JSON.parse(localStorage.getItem('userInfo'));

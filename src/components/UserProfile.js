@@ -1,6 +1,6 @@
-import React from 'react';
-import { Typography, Paper, Grid, Divider, IconButton, Button, Avatar } from '@mui/material';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { Typography, Paper, Grid, Divider, IconButton, Button, Avatar, CircularProgress } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon, PhotoCamera } from '@mui/icons-material';
 import EducationForm from './EducationForm';
 import ExperianceForm from './ExperianceForm';
 import ProjectForm from './ProjectForm';
@@ -9,8 +9,11 @@ import useProfile from '../hooks/useProfile';
 import useEducation from '../hooks/useEducation';
 import useExperiance from '../hooks/useExperiance';
 import useProject from '../hooks/useProject';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfile } from '../services/userProfileService';
 
 const UserProfile = ({ userId, userInfo, profileInfo }) => {
+  const dispatch = useDispatch();
   const {
     checkEducationFormStatus,
     setCheckEducationFormStatus,
@@ -34,22 +37,77 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
   } = useProject();
 
   const { userProfileData, setUserProfileData, userProfileFormStatus, setUserProfileFormStatus } = useProfile();
+
+  const { loading, error, message } = useSelector((state) => state.userProfile);
+
+
   const handleProfileEdit = (data) => {
     setUserProfileData(data);
     setUserProfileFormStatus(true);
   };
 
+  const [selectedImage, setSelectedImage] = useState(profileInfo?.profileImage || '');
+  const [CheckselectedImage, setCheckSelectedImage] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  console.log(profileInfo)
+
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImage(e.target.result);
+        setCheckSelectedImage(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+  const handleToUploadProfileImg = (e) => {
+    e.preventDefault();
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append('profileImage', imageFile);
+      dispatch(updateUserProfile(formData));
+    }
+  };
+
   return (
     <Grid spacing={4} style={{ padding: '20px', marginBottom: '10px' }}>
       <Grid item xs={12} sm={6} md={4} mb={2}>
-        <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
+        <Paper elevation={3} style={{ padding: '20px', textAlign: 'center', position: 'relative' }}>
           <Avatar
-            src={profileInfo?.avatar || ''}
+            src={CheckselectedImage ? selectedImage : profileInfo?.profileImage}
             alt={profileInfo?.name || 'User'}
             sx={{ width: 100, height: 100, margin: '0 auto' }}
           >
             {profileInfo?.name ? profileInfo.name.charAt(0).toUpperCase() : 'U'}
           </Avatar>
+          <IconButton
+            color="primary"
+            component="label"
+            style={{
+              position: 'absolute',
+              top: 85,
+              left: 'calc(50% + 35px)',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              padding: '5px',
+            }}
+          >
+            <input type="file" accept="image/*" hidden onChange={handleImageUpload} />
+            <PhotoCamera />
+          </IconButton>
+          {CheckselectedImage && (
+            <Button disabled={loading} onClick={handleToUploadProfileImg}>
+              {loading ? <CircularProgress size={24} /> : 'Upload'}
+            </Button>
+          )}
+
           <Typography variant="h5" component="h2" gutterBottom style={{ marginTop: '20px', fontWeight: 'bold' }}>
             {profileInfo?.name}
           </Typography>
@@ -77,18 +135,18 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
             </Button>
           )}
         </Paper>
-
       </Grid>
+
       <Grid item xs={12} mb={2}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h5" component="h2" gutterBottom>
-            Education
+            <strong>Education</strong>
           </Typography>
           <Divider style={{ marginBottom: '20px' }} />
           {profileInfo?.education &&
             profileInfo?.education.map((edu, index) => (
               <div key={index} style={{ marginBottom: '20px' }}>
-                <Typography variant="subtitle1">{edu?.CourseOrBranchName}</Typography>
+                <Typography variant="subtitle1"><strong>{edu?.CourseOrBranchName}</strong></Typography>
                 <Typography variant="subtitle1">{edu?.collegeOrUniversity}</Typography>
                 <Typography variant="body2">{edu?.passingYear}</Typography>
                 <Typography variant="body2">{edu?.cgpaOrPercentage}</Typography>
@@ -124,13 +182,13 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
       <Grid item xs={12} mb={2}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h5" component="h2" gutterBottom>
-            Projects
+            <strong>Projects</strong>
           </Typography>
           <Divider style={{ marginBottom: '20px' }} />
           {profileInfo?.projects &&
             profileInfo?.projects.map((project, index) => (
               <div key={index} style={{ marginBottom: '20px' }}>
-                <Typography variant="subtitle1">{project.projectTitle}</Typography>
+                <Typography variant="subtitle1"><strong>{project.projectTitle}</strong></Typography>
                 <Typography variant="body2">{project.projectDuration}</Typography>
                 <Typography variant="body2">{project.projectDescription}</Typography>
                 <Typography variant="body2">{project.projectCodeOrHostLink}</Typography>
@@ -165,13 +223,13 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
       <Grid item xs={12} mb={2}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h5" component="h2" gutterBottom>
-            Experience
+            <strong>Experience</strong>
           </Typography>
           <Divider style={{ marginBottom: '20px' }} />
           {profileInfo?.experience &&
             profileInfo?.experience.map((exp, index) => (
               <div key={index} style={{ marginBottom: '20px' }}>
-                <Typography variant="subtitle1">{exp.companyName}</Typography>
+                <Typography variant="subtitle1"><strong>{exp.companyName}</strong></Typography>
                 <Typography variant="body2">{exp.jobProfile}</Typography>
                 <Typography variant="body2">{exp.jobType}</Typography>
                 <Typography variant="body2">{exp.jobDescription}</Typography>
