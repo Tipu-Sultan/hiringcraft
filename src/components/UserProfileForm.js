@@ -19,6 +19,8 @@ const UserProfileForm = ({ setUserProfileFormStatus, userProfileData }) => {
     const [userProfileName, setUserProfileName] = useState(userProfileData?.name);
     const [userProfileEmail, setUserProfileEmail] = useState(userProfileData?.email);
     const [userProfileAddress, setUserProfileAddress] = useState(userProfileData?.address);
+    const [userProfileMobile, setUserProfileMobile] = useState(userProfileData?.mobile);
+
 
     const handleUpdateProfile = (e) => {
         try {
@@ -26,6 +28,7 @@ const UserProfileForm = ({ setUserProfileFormStatus, userProfileData }) => {
             const newUserProfileData = {
                 name: userProfileName,
                 email: userProfileEmail,
+                mobile: userProfileMobile,
                 address: userProfileAddress
             };
             dispatch(updateUserProfile(newUserProfileData));
@@ -55,6 +58,15 @@ const UserProfileForm = ({ setUserProfileFormStatus, userProfileData }) => {
                 label="Email"
                 value={userProfileEmail}
                 onChange={(e) => setUserProfileEmail(e.target.value)}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                required
+            />
+            <TextField
+                label="Mobile Number"
+                value={userProfileMobile}
+                onChange={(e) =>setUserProfileMobile(e.target.value)}
                 fullWidth
                 margin="normal"
                 variant="outlined"

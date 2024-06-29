@@ -118,6 +118,9 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
           <Typography variant="body1" style={{ marginBottom: '5px' }}>
             <strong>Email:</strong> {profileInfo?.email}
           </Typography>
+          <Typography variant="body1" style={{ marginBottom: '5px' }}>
+            <strong>Contact Number:</strong> {profileInfo?.mobile}
+          </Typography>
           <Typography variant="body1" style={{ marginBottom: '20px' }}>
             <strong>Address:</strong> {profileInfo?.address}
           </Typography>

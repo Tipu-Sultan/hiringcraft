@@ -19,7 +19,16 @@ const userSlice = createSlice({
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.profileInfo = action.payload;
+        state.profileInfo = {
+          ...state.profileInfo,
+          address: action.payload.address,
+          email: action.payload.email,
+          mobile: action.payload.mobile,
+          name: action.payload.name,
+          profileImage: action.payload.profileImage,
+          role: action.payload.role
+        };
+
         state.message = action.payload.message;
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
