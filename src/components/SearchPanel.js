@@ -1,32 +1,40 @@
-// src/components/SearchPanel.js
-
 import React, { useState } from 'react';
-import { Box, Button, TextField, MenuItem, Grid } from '@mui/material';
+import { Box, Button, TextField, MenuItem, Grid, CircularProgress } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { filterJobs } from '../services/jobService';
 
 const jobTypes = [
-    { value: 'full-time', label: 'Full-time' },
-    { value: 'part-time', label: 'Part-time' },
-    { value: 'contract', label: 'Contract' },
+    { value: 'Php Developer', label: 'Php Developer' },
+    { value: 'Web Developer', label: 'Web Developer' },
+    { value: 'React Developer', label: 'React Developer' },
 ];
 
-const SearchPanel = ({ onSearch }) => {
+const SearchPanel = () => {
     const [company, setCompany] = useState('');
     const [location, setLocation] = useState('');
-    const [jobType, setJobType] = useState('');
+    const [jobProfileType, setJobProfileType] = useState('');
+    const {loading} = useSelector((state) => state.jobs);
 
-    const handleSearch = () => {
-        // Call the onSearch function with the search parameters
-        if (onSearch) {
-            onSearch({ company, location, jobType });
-        }
+    const dispatch = useDispatch();
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const searchParams = {};
+        if (company) searchParams.company = company;
+        if (location) searchParams.location = location;
+        if (jobProfileType) searchParams.jobProfileType = jobProfileType;
+
+        dispatch(filterJobs(searchParams));
     };
 
     return (
         <Box mb={2} sx={{ width: '100%' }}>
+            <form onSubmit={handleSearch}>
             <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={6} md={3}>
                     <TextField
                         label="Company Name"
+                        name='company_name'
                         variant="outlined"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
@@ -36,6 +44,7 @@ const SearchPanel = ({ onSearch }) => {
                 <Grid item xs={12} sm={6} md={3}>
                     <TextField
                         label="Location"
+                        name='location'
                         variant="outlined"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
@@ -45,10 +54,11 @@ const SearchPanel = ({ onSearch }) => {
                 <Grid item xs={12} sm={6} md={3}>
                     <TextField
                         label="Job Type"
+                        name='jobType'
                         select
                         variant="outlined"
-                        value={jobType}
-                        onChange={(e) => setJobType(e.target.value)}
+                        value={jobProfileType}
+                        onChange={(e) => setJobProfileType(e.target.value)}
                         fullWidth
                     >
                         <MenuItem disabled>Select Job Type</MenuItem>
@@ -66,11 +76,13 @@ const SearchPanel = ({ onSearch }) => {
                         onClick={handleSearch}
                         fullWidth
                         sx={{ height: '100%' }}
+                        type="submit"
                     >
-                        Search
+                        {loading ? <CircularProgress size={24} /> : 'Search'}
                     </Button>
                 </Grid>
             </Grid>
+            </form>
         </Box>
     );
 };

@@ -83,7 +83,7 @@ const JobForm = () => {
     } else {
       dispatch(createJob(formState));
     }
-    navigate('/posted-jobs');
+    navigate('/jobs/posted-jobs');
   };
 
   if (loading) return <p>Loading...</p>;

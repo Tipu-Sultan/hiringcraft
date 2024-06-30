@@ -8,6 +8,7 @@ import {
   Grid,
   Button,
   Box,
+  CircularProgress
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { fetchJobs } from '../services/jobService';
@@ -18,11 +19,52 @@ import WorkIcon from '@mui/icons-material/Work';
 
 const JobList = () => {
   const dispatch = useDispatch();
-  const jobs = useSelector((state) => state.jobs.jobs);
+  const { jobs, loading, error } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(fetchJobs());
   }, [dispatch]);
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (!loading && jobs.length === 0) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h6">Jobs not found</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Grid container spacing={3}>

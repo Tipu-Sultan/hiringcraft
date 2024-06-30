@@ -11,6 +11,15 @@ export const fetchJobs = createAsyncThunk('jobs/fetchJobs', async (_, { rejectWi
     }
 });
 
+export const filterJobs = createAsyncThunk('jobs/fetchJobs', async (searchParams, { rejectWithValue }) => {
+    try {
+        const { data } = await axios.get(`${process.env.REACT_APP_API_HOST}/api/jobs/filter`, { params: searchParams });
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response.data.message);
+    }
+});
+
 export const fetchJobspostedBy = createAsyncThunk('jobs/fetchJobspostedBy', async (postedBy, { rejectWithValue }) => {
     const { token } = JSON.parse(localStorage.getItem('userInfo'));
             const config = {
