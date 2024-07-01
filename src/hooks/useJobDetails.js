@@ -47,7 +47,7 @@ export const useApplyJob = (job) => {
 
       console.log('Apply Job Response:', response); 
 
-      setSnackbarMessage('Application submitted successfully');
+      setSnackbarMessage(response.message);
       setSnackbarOpen(true);
     } catch (error) {
       console.error('Error applying for job:', error);

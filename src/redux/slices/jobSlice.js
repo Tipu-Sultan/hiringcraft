@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { applyJob,fetchJobById, fetchJobs, fetchAppliedJobs, filterJobs } from '../../services/jobService';
+import { applyJob,fetchJobById, fetchJobs, fetchAppliedJobs, filterJobs, cancelJobApplication } from '../../services/jobService';
 
 const jobSlice = createSlice({
   name: 'jobs',
@@ -61,6 +61,18 @@ const jobSlice = createSlice({
         state.appliedJobs = action.payload;
       })
       .addCase(fetchAppliedJobs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(cancelJobApplication.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(cancelJobApplication.fulfilled, (state, action) => {
+        state.loading = false;
+        state.appliedJobs = state.appliedJobs.filter(job => job._id !== action.payload.jobId);
+      })
+      .addCase(cancelJobApplication.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAppliedJobs } from '../services/jobService';
+import { cancelJobApplication, fetchAppliedJobs } from '../services/jobService';
 
 
 
@@ -12,11 +12,16 @@ export const useApplied = (userId) => {
 
   useEffect(() => {
     dispatch(fetchAppliedJobs(userId));
-  }, [dispatch,userId]);
+  }, [dispatch, userId]);
+
+  const handleDeleteJob = (jobId) => {
+    dispatch(cancelJobApplication(jobId));
+  }
 
   return {
     appliedJobs,
     loading,
     error,
+    handleDeleteJob
   };
 };
