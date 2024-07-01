@@ -1,34 +1,53 @@
 import React, { useState } from 'react';
-import { Typography, Box, Paper, Button, Modal, Backdrop, Fade, Grid, TextField } from '@mui/material';
+import { Typography, Box, Paper, Button, Modal, Backdrop, Fade, Grid, TextField, Divider } from '@mui/material';
 
 const DangerZone = ({userInfo}) => {
-  const [open, setOpen] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openDeactivateModal, setOpenDeactivateModal] = useState(false);
+  const [openEmailModal, setOpenEmailModal] = useState(false);
   const [newEmail, setNewEmail] = useState('');
-  const [emailChangeOpen, setEmailChangeOpen] = useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpenDeleteModal = () => {
+    setOpenDeleteModal(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setEmailChangeOpen(false);
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  const handleOpenDeactivateModal = () => {
+    setOpenDeactivateModal(true);
+  };
+
+  const handleCloseDeactivateModal = () => {
+    setOpenDeactivateModal(false);
+  };
+
+  const handleOpenEmailModal = () => {
+    setOpenEmailModal(true);
+  };
+
+  const handleCloseEmailModal = () => {
+    setOpenEmailModal(false);
+    setNewEmail('');
   };
 
   const handleDeleteAccount = () => {
     // Add account deletion logic here
     console.log("Account deleted");
-    handleClose();
+    handleCloseDeleteModal();
   };
 
-  const handleEmailChange = () => {
-    setEmailChangeOpen(true);
+  const handleDeactivateAccount = () => {
+    // Add account deactivation logic here
+    console.log("Account deactivated");
+    handleCloseDeactivateModal();
   };
 
   const handleEmailSubmit = () => {
     // Handle email change logic here
     console.log("Email changed to:", newEmail);
-    handleClose();
+    handleCloseEmailModal();
   };
 
   return (
@@ -39,13 +58,15 @@ const DangerZone = ({userInfo}) => {
       <Typography variant="body1" sx={{ mt: 1, mb: 3 }}>
         Be careful! These actions are irreversible.
       </Typography>
+
+      {/* Delete Account Section */}
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Button 
             variant="contained" 
             color="error" 
             fullWidth
-            onClick={handleOpen}
+            onClick={handleOpenDeleteModal}
             sx={{
               p: 1.5,
               fontSize: '1rem',
@@ -62,13 +83,36 @@ const DangerZone = ({userInfo}) => {
             variant="outlined" 
             color="warning"
             fullWidth
-            onClick={handleEmailChange}
+            onClick={handleOpenDeactivateModal}
             sx={{
               p: 1.5,
               fontSize: '1rem',
               fontWeight: 'bold',
               borderRadius: 1,
               '&:hover': { backgroundColor: '#fff3e0' },
+            }}
+          >
+            Deactivate Account
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Divider sx={{ my: 3 }} />
+
+      {/* Switch/Add Email Section */}
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Button 
+            variant="outlined" 
+            color="primary"
+            fullWidth
+            onClick={handleOpenEmailModal}
+            sx={{
+              p: 1.5,
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              borderRadius: 1,
+              '&:hover': { backgroundColor: '#e0f7fa' },
             }}
           >
             Switch/Add Email
@@ -80,15 +124,15 @@ const DangerZone = ({userInfo}) => {
       <Modal
         aria-labelledby="delete-account-modal-title"
         aria-describedby="delete-account-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={open}>
+        <Fade in={openDeleteModal}>
           <Box 
             sx={{
               position: 'absolute',
@@ -119,7 +163,60 @@ const DangerZone = ({userInfo}) => {
               </Button>
               <Button 
                 variant="outlined" 
-                onClick={handleClose}
+                onClick={handleCloseDeleteModal}
+                sx={{ fontWeight: 'bold' }}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
+
+      {/* Deactivate Account Modal */}
+      <Modal
+        aria-labelledby="deactivate-account-modal-title"
+        aria-describedby="deactivate-account-modal-description"
+        open={openDeactivateModal}
+        onClose={handleCloseDeactivateModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDeactivateModal}>
+          <Box 
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: { xs: '90%', sm: 400 },
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <Typography id="deactivate-account-modal-title" variant="h6" component="h2">
+              Confirm Account Deactivation
+            </Typography>
+            <Typography id="deactivate-account-modal-description" sx={{ mt: 2 }}>
+              Are you sure you want to deactivate your account? You can reactivate it later.
+            </Typography>
+            <Box mt={3} display="flex" justifyContent="space-between">
+              <Button 
+                variant="contained" 
+                color="warning"
+                onClick={handleDeactivateAccount}
+                sx={{ fontWeight: 'bold' }}
+              >
+                Deactivate
+              </Button>
+              <Button 
+                variant="outlined" 
+                onClick={handleCloseDeactivateModal}
                 sx={{ fontWeight: 'bold' }}
               >
                 Cancel
@@ -133,15 +230,15 @@ const DangerZone = ({userInfo}) => {
       <Modal
         aria-labelledby="email-change-modal-title"
         aria-describedby="email-change-modal-description"
-        open={emailChangeOpen}
-        onClose={handleClose}
+        open={openEmailModal}
+        onClose={handleCloseEmailModal}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={emailChangeOpen}>
+        <Fade in={openEmailModal}>
           <Box 
             sx={{
               position: 'absolute',
@@ -181,7 +278,7 @@ const DangerZone = ({userInfo}) => {
               </Button>
               <Button 
                 variant="outlined" 
-                onClick={handleClose}
+                onClick={handleCloseEmailModal}
                 sx={{ fontWeight: 'bold' }}
               >
                 Cancel
