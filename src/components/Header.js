@@ -8,8 +8,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import hiringcraft from '../assets/hiringcraft.png';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const Header = () => {
+const Header = ({toggleTheme,themeMode}) => {
+  const toggleIcon = themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />;
+
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -187,6 +191,9 @@ const Header = () => {
                 </Button>
               </>
             )}
+            <IconButton onClick={toggleTheme} color="inherit">
+        {toggleIcon}
+      </IconButton>
           </>
         )}
       </Toolbar>
