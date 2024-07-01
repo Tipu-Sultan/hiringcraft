@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { handlerEduCationDelete, handlerProjectDelete, updateUserProjectProfile } from '../services/userProfileService';
+import {handlerProjectDelete, updateUserProjectProfile } from '../services/userProfileService';
 
 const useProject = () => {
     const dispatch = useDispatch();

@@ -49,8 +49,6 @@ const UserProfile = ({ userId, userInfo, profileInfo }) => {
   const [selectedImage, setSelectedImage] = useState(profileInfo?.profileImage || '');
   const [CheckselectedImage, setCheckSelectedImage] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-  console.log(profileInfo)
-
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];

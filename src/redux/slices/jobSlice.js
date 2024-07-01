@@ -47,6 +47,7 @@ const jobSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.jobs.applicants.push(action.payload.applicant);
+        state.user.userInfo.appliedJobs.push(action.payload.jobId);
       })
       .addCase(applyJob.rejected, (state, action) => {
         state.loading = false;

@@ -17,6 +17,7 @@ import PostedJobsPage from './pages/PostedJobsPage'; // Import PostedJobsPage co
 import ViewApplicantsPage from './pages/ViewApplicantsPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import AppliedJobsPage from './pages/AppliedJobsPage';
+import SettingPage from './pages/SettingPage';
 
 const App = () => {
 
@@ -34,7 +35,14 @@ const App = () => {
         </Route>
 
         <Route path="/" element={<PrivateRoute />}>
-          <Route path="/profile/:userId" element={<ProfilePage />} />
+
+          <Route path="/profile/:userId" element={<PrivateRoute roles={['employer','normal']} />}>
+            <Route index element={<ProfilePage mode="profile" />} />
+          </Route>
+
+          <Route path="/setting/:userId" element={<PrivateRoute roles={['employer','normal']} />}>
+            <Route index element={<SettingPage mode="setting" />} />
+          </Route>
           
           <Route path="/jobs/:id" element={<JobDetailPage />} />
 

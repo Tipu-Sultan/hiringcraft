@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Button, Box, IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { AppBar, Toolbar, Button, Box, IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemText, Divider, Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/userSlice';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ const Header = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -45,10 +45,10 @@ const Header = () => {
         <>
           {userInfo.role === 'employer' && (
             <>
-              <ListItem  component={Link} to="/create-job">
+              <ListItem component={Link} to="/create-job">
                 <ListItemText primary="Create Job" />
               </ListItem>
-              <ListItem  component={Link} to="/posted-jobs">
+              <ListItem component={Link} to="/posted-jobs">
                 <ListItemText primary="Posted Jobs" />
               </ListItem>
               <Divider />
@@ -56,16 +56,16 @@ const Header = () => {
           )}
           {userInfo.role === 'normal' && (
             <>
-              <ListItem  component={Link} to="jobs/applied-jobs">
+              <ListItem component={Link} to="jobs/applied-jobs">
                 <ListItemText primary="Applied Jobs" />
               </ListItem>
               <Divider />
             </>
           )}
-          <ListItem  component={Link} to={`/profile/${userInfo._id}`}>
+          <ListItem component={Link} to={`/profile/${userInfo._id}`}>
             <ListItemText primary="Profile" />
           </ListItem>
-          <ListItem  onClick={handleLogout}>
+          <ListItem onClick={handleLogout}>
             <ListItemText primary="Logout" />
           </ListItem>
         </>
@@ -87,11 +87,11 @@ const Header = () => {
       <Toolbar>
         <Box display="flex" alignItems="center" sx={{ marginRight: 2 }}>
           <a href='/'>
-          <img
-            style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px', cursor: 'pointer' }}
-            src={hiringcraft}
-            alt="HiringCraft Logo"
-          />
+            <img
+              style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px', cursor: 'pointer' }}
+              src={hiringcraft}
+              alt="HiringCraft Logo"
+            />
           </a>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
@@ -150,7 +150,11 @@ const Header = () => {
                   onClick={handleMenu}
                   sx={{ '&:hover': { backgroundColor: '#303f9f' } }}
                 >
-                  <AccountCircle />
+                  {userInfo.profileImage ? (
+                    <Avatar src={userInfo.profileImage} />
+                  ) : (
+                    <AccountCircle />
+                  )}
                 </IconButton>
                 <Menu
                   id="profile-menu"
@@ -160,6 +164,7 @@ const Header = () => {
                 >
                   <MenuItem component={Link} to={`/profile/${userInfo._id}`}>Profile</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  <MenuItem component={Link} to={`/setting/${userInfo._id}`}>Settings</MenuItem>
                 </Menu>
               </>
             ) : (
