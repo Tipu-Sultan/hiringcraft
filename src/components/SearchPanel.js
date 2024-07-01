@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, MenuItem, Grid, CircularProgress } from '@mui/material';
+import { Box, Button, TextField, MenuItem, Grid, CircularProgress, Autocomplete } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterJobs } from '../services/jobService';
 
@@ -13,7 +13,7 @@ const SearchPanel = () => {
     const [company, setCompany] = useState('');
     const [location, setLocation] = useState('');
     const [jobProfileType, setJobProfileType] = useState('');
-    const {loading} = useSelector((state) => state.jobs);
+    const { loading } = useSelector((state) => state.jobs);
 
     const dispatch = useDispatch();
 
@@ -30,58 +30,58 @@ const SearchPanel = () => {
     return (
         <Box mb={2} sx={{ width: '100%' }}>
             <form onSubmit={handleSearch}>
-            <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} sm={6} md={3}>
-                    <TextField
-                        label="Company Name"
-                        name='company_name'
-                        variant="outlined"
-                        value={company}
-                        onChange={(e) => setCompany(e.target.value)}
-                        fullWidth
-                    />
+                <Grid container spacing={2} justifyContent="center">
+                    <Grid item xs={12} sm={6} md={3}>
+                        <TextField
+                            label="Company Name"
+                            name='company_name'
+                            variant="outlined"
+                            value={company}
+                            onChange={(e) => setCompany(e.target.value)}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <TextField
+                            label="Location"
+                            name='location'
+                            variant="outlined"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Autocomplete
+                            options={jobTypes}
+                            getOptionLabel={(option) => option.label}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Job Type"
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            )}
+                            value={jobTypes.find(option => option.value === jobProfileType) || null}
+                            onChange={(event, newValue) => {
+                                setJobProfileType(newValue ? newValue.value : '');
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSearch}
+                            fullWidth
+                            sx={{ height: '100%' }}
+                            type="submit"
+                        >
+                            {loading ? <CircularProgress size={24} /> : 'Search'}
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <TextField
-                        label="Location"
-                        name='location'
-                        variant="outlined"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <TextField
-                        label="Job Type"
-                        name='jobType'
-                        select
-                        variant="outlined"
-                        value={jobProfileType}
-                        onChange={(e) => setJobProfileType(e.target.value)}
-                        fullWidth
-                    >
-                        <MenuItem disabled>Select Job Type</MenuItem>
-                        {jobTypes.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSearch}
-                        fullWidth
-                        sx={{ height: '100%' }}
-                        type="submit"
-                    >
-                        {loading ? <CircularProgress size={24} /> : 'Search'}
-                    </Button>
-                </Grid>
-            </Grid>
             </form>
         </Box>
     );
