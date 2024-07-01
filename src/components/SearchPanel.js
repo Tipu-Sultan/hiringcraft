@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, MenuItem, Grid, CircularProgress, Autocomplete } from '@mui/material';
+import { Box, Button, TextField, Chip, Grid, CircularProgress, Autocomplete } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterJobs } from '../services/jobService';
 
@@ -10,7 +10,7 @@ const jobTypes = [
 ];
 
 const SearchPanel = () => {
-    const [company, setCompany] = useState('');
+    const [companyInput, setCompanyInput] = useState([]);
     const [location, setLocation] = useState('');
     const [jobProfileType, setJobProfileType] = useState('');
     const { loading } = useSelector((state) => state.jobs);
@@ -20,7 +20,7 @@ const SearchPanel = () => {
     const handleSearch = (e) => {
         e.preventDefault();
         const searchParams = {};
-        if (company) searchParams.company = company;
+        if (companyInput.length > 0) searchParams.company = companyInput;
         if (location) searchParams.location = location;
         if (jobProfileType) searchParams.jobProfileType = jobProfileType;
 
@@ -32,19 +32,35 @@ const SearchPanel = () => {
             <form onSubmit={handleSearch}>
                 <Grid container spacing={2} justifyContent="center">
                     <Grid item xs={12} sm={6} md={3}>
-                        <TextField
-                            label="Company Name"
-                            name='company_name'
-                            variant="outlined"
-                            value={company}
-                            onChange={(e) => setCompany(e.target.value)}
-                            fullWidth
+                        <Autocomplete
+                            multiple
+                            freeSolo
+                            options={[]}
+                            value={companyInput}
+                            onChange={(event, newValue) => setCompanyInput(newValue)}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        variant="outlined"
+                                        label={option}
+                                        {...getTagProps({ index })}
+                                    />
+                                ))
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Company Name"
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            )}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <TextField
                             label="Location"
-                            name='location'
+                            name="location"
                             variant="outlined"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
@@ -73,7 +89,6 @@ const SearchPanel = () => {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={handleSearch}
                             fullWidth
                             sx={{ height: '100%' }}
                             type="submit"
