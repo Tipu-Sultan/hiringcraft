@@ -30,8 +30,9 @@ const SearchPanel = () => {
     return (
         <Box mb={2} sx={{ width: '100%' }}>
             <form onSubmit={handleSearch}>
-                <Grid container spacing={2} justifyContent="center">
-                    <Grid item xs={12} sm={6} md={3}>
+                <Grid container spacing={2} alignItems="center">
+                    {/* Company Name */}
+                    <Grid item xs={12} sm={4}>
                         <Autocomplete
                             multiple
                             freeSolo
@@ -41,6 +42,7 @@ const SearchPanel = () => {
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
                                     <Chip
+                                        key={index}
                                         variant="outlined"
                                         label={option}
                                         {...getTagProps({ index })}
@@ -51,13 +53,15 @@ const SearchPanel = () => {
                                 <TextField
                                     {...params}
                                     label="Company Name"
+                                    placeholder='Abc, Inc.,Xyz'
                                     variant="outlined"
                                     fullWidth
                                 />
                             )}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    {/* Location */}
+                    <Grid item xs={12} sm={4}>
                         <TextField
                             label="Location"
                             name="location"
@@ -67,10 +71,16 @@ const SearchPanel = () => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    {/* Job Type */}
+                    <Grid item xs={12} sm={3}>
                         <Autocomplete
+                            multiple
                             options={jobTypes}
                             getOptionLabel={(option) => option.label}
+                            value={jobTypes.filter(option => jobProfileType.includes(option.value))}
+                            onChange={(event, newValue) => {
+                                setJobProfileType(newValue.map(option => option.value));
+                            }}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -79,18 +89,15 @@ const SearchPanel = () => {
                                     fullWidth
                                 />
                             )}
-                            value={jobTypes.find(option => option.value === jobProfileType) || null}
-                            onChange={(event, newValue) => {
-                                setJobProfileType(newValue ? newValue.value : '');
-                            }}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    {/* Search Button */}
+                    <Grid item xs={12} sm={1}>
                         <Button
                             variant="contained"
                             color="primary"
                             fullWidth
-                            sx={{ height: '100%' }}
+                            sx={{padding:'15px', height: '100%', minHeight: '100%' }} // Maintain consistent height
                             type="submit"
                         >
                             {loading ? <CircularProgress size={24} /> : 'Search'}
