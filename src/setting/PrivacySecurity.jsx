@@ -7,7 +7,7 @@ const PrivacySecurity = ({userInfo}) => {
     const [resumeVisibility, setResumeVisibility] = useState('employer');
 
     return (
-        <Paper elevation={3} sx={{ p: 3, mt: 3, backgroundColor: '#f5f5f5', borderRadius: 2 }}>
+        <Paper elevation={3} sx={{ p: 3, mt: 3, borderRadius: 2 }}>
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
                 Privacy & Security
             </Typography>

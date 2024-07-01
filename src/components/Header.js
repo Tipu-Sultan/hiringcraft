@@ -11,7 +11,7 @@ import hiringcraft from '../assets/hiringcraft.png';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const Header = ({toggleTheme,themeMode}) => {
+const Header = ({ toggleTheme, themeMode }) => {
   const toggleIcon = themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />;
 
   const dispatch = useDispatch();
@@ -191,11 +191,12 @@ const Header = ({toggleTheme,themeMode}) => {
                 </Button>
               </>
             )}
-            <IconButton onClick={toggleTheme} color="inherit">
-        {toggleIcon}
-      </IconButton>
           </>
         )}
+        {/* Toggle Theme Button */}
+        <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: '10px' }}>
+          {toggleIcon}
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
