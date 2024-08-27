@@ -5,14 +5,17 @@ import { applyJob, fetchJobById } from '../services/jobService';
 
 export const useJobDetails = () => {
   const { id } = useParams();
-  const dispatch = useDispatch()
-  const job = useSelector((state) => state.jobs.jobs);
+  console.log(id)
+  const dispatch = useDispatch();
+  const {jobs} = useSelector((state) => state?.jobs);
+  const job = jobs?.find((job) => job._id === id);
 
   useEffect(() => {
-    if (id) {
+    if (id && !job) {
       dispatch(fetchJobById(id));
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, job]);
+
   return { job, id };
 };
 

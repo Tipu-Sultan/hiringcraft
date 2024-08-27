@@ -146,6 +146,18 @@ const Header = ({ toggleTheme, themeMode }) => {
                     </Button>
                   </>
                 )}
+                {(userInfo.role === 'normal' || userInfo.role === 'employer') &&(
+                  <>
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="chat"
+                      sx={{ '&:hover': { backgroundColor: '#303f9f', color: '#fff' }, marginRight: 2 }}
+                    >
+                      Chat
+                    </Button>
+                  </>
+                )}
                 <IconButton
                   edge="end"
                   color="inherit"

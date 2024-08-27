@@ -3,7 +3,7 @@ import { Container, Grid, Card, CardContent, Typography, Button, Snackbar } from
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useApplied } from '../hooks/useApplied';
-import NoJobsImage from '../assets/hiringcraft.png'; // Import your funny image
+import NoJobsImage from '../assets/hiringcraft.png'; 
 
 const AppliedJobsPage = () => {
   const userInfo = useSelector((state) => state.user.userInfo);

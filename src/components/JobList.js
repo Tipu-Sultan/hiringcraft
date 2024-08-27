@@ -16,6 +16,8 @@ import BusinessIcon from '@mui/icons-material/Business';
 import TitleIcon from '@mui/icons-material/Title';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WorkIcon from '@mui/icons-material/Work';
+import NoJobsImage from '../assets/hiringcraft.png'; 
+
 
 const JobList = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,6 @@ const JobList = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="100vh"
       >
         <CircularProgress />
       </Box>
@@ -44,7 +45,6 @@ const JobList = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="100vh"
       >
         <Typography variant="h6" color="error">
           {error}
@@ -59,7 +59,6 @@ const JobList = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="100vh"
       >
         <Typography variant="h6">Jobs not found</Typography>
       </Box>
@@ -75,7 +74,7 @@ const JobList = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image={job.jobImage}
+                image={NoJobsImage}
                 alt={job.jobTitle}
               />
             )}
@@ -96,7 +95,7 @@ const JobList = () => {
                 <WorkIcon sx={{ mr: 1 }} />
                 <Typography>{job.experience}</Typography>
               </Box>
-              <Button sx={{ marginTop: 1 }} component={Link} to={`/jobs/${job._id}`} variant="contained" color="primary">
+              <Button  sx={{ marginTop: 1 }} component={Link} to={`/jobs/${job._id}`} variant="contained" color="primary">
                 View Details
               </Button>
             </CardContent>

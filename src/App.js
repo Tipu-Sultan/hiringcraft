@@ -19,6 +19,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import AppliedJobsPage from './pages/AppliedJobsPage';
 import SettingPage from './pages/SettingPage';
 import { lightTheme, darkTheme } from './themes';
+import ChatPage from './pages/ChatPage';
 
 
 const App = () => {
@@ -46,7 +47,9 @@ const App = () => {
           </Route>
 
           <Route path="/" element={<PrivateRoute />}>
-
+          <Route path="/chat" element={<PrivateRoute roles={['employer', 'normal']} />}>
+              <Route index element={<ChatPage mode="chat" />} />
+            </Route>
             <Route path="/profile/:userId" element={<PrivateRoute roles={['employer', 'normal']} />}>
               <Route index element={<ProfilePage mode="profile" />} />
             </Route>

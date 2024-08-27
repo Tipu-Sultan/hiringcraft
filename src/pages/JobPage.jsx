@@ -10,7 +10,7 @@ const JobPage = () => {
     <Container>
       <Box textAlign="center" mt={10} mb={4}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Find Your Skillsfull Jobs
+        Find Your Skillful Jobs
         </Typography>
       </Box>
       <SearchPanel />
