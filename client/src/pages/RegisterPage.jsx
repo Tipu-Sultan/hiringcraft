@@ -140,7 +140,7 @@ const RegisterPage = () => {
             color="primary"
             disabled={!isFormValid() || loading}
           >
-            Register
+            {loading?'Register...':'Register'}
           </Button>
           {error && (
             <Typography color="error" style={{ marginTop: '1rem' }}>

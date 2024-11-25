@@ -89,7 +89,7 @@ const LoginPage = () => {
               Forgot Password?
             </Link>
             <Button type="submit" variant="contained" color="primary" disabled={loading}>
-              Login
+              {loading?'Loggin...':'Login'}
             </Button>
           </Box>
           {error && (
