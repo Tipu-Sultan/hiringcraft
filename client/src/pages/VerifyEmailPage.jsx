@@ -25,14 +25,13 @@ const VerifyEmailPage = () => {
 
         const { data } = await axios.get(`${process.env.REACT_APP_API_HOST}/api/users/verify-email?token=${token}`);
         setMessage(data.message);
-      } catch (error) {
-        setMessage(error.response.data.message);
-      } finally {
         setLoading(false);
         setTimeout(() => {
           navigate('/login');
         }, 30000);
-      }
+      } catch (error) {
+        setMessage(error.response.data.message);
+      } 
     };
 
     verifyEmail();
