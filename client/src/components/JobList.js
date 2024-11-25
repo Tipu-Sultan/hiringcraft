@@ -16,7 +16,7 @@ import BusinessIcon from '@mui/icons-material/Business';
 import TitleIcon from '@mui/icons-material/Title';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WorkIcon from '@mui/icons-material/Work';
-import NoJobsImage from '../assets/hiringcraft.png'; 
+import NoJobsImage from '../assets/hiringcraft.png';
 
 
 const JobList = () => {
@@ -24,8 +24,11 @@ const JobList = () => {
   const { jobs, loading, error } = useSelector((state) => state.jobs);
 
   useEffect(() => {
-    dispatch(fetchJobs());
-  }, [dispatch]);
+    if (jobs.length === 0) {
+      dispatch(fetchJobs());
+
+    }
+  }, [dispatch, jobs]);
 
   if (loading) {
     return (
@@ -95,7 +98,7 @@ const JobList = () => {
                 <WorkIcon sx={{ mr: 1 }} />
                 <Typography>{job.experience}</Typography>
               </Box>
-              <Button  sx={{ marginTop: 1 }} component={Link} to={`/jobs/${job._id}`} variant="contained" color="primary">
+              <Button sx={{ marginTop: 1 }} component={Link} to={`/jobs/${job._id}`} variant="contained" color="primary">
                 View Details
               </Button>
             </CardContent>

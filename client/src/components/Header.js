@@ -90,13 +90,13 @@ const Header = ({ toggleTheme, themeMode }) => {
     <AppBar position="static" sx={{ backgroundColor: '#3f51b5' }}>
       <Toolbar>
         <Box display="flex" alignItems="center" sx={{ marginRight: 2 }}>
-          <a href='/'>
+          <Link to='/'>
             <img
               style={{ textDecoration: 'none', color: 'inherit', height: '40px', marginRight: '8px', cursor: 'pointer' }}
               src={hiringcraft}
               alt="HiringCraft Logo"
             />
-          </a>
+          </Link>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
         {isMobile ? (

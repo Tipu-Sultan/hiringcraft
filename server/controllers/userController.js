@@ -13,25 +13,44 @@ dotenv.config();
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, role } = req.body;
-  const userExists = await User.findOne({ email });
 
   // Check if user already exists
+  const userExists = await User.findOne({ email });
   if (userExists) {
     return res.status(400).json({ message: 'User already exists' });
   }
 
   // Validate password criteria (Implement your own criteria check function)
   const passwordCriteria = checkPassword(password); // Assume this function is defined elsewhere
-  if (!passwordCriteria.length || !passwordCriteria.lowercase || !passwordCriteria.uppercase || !passwordCriteria.number || !passwordCriteria.specialChar) {
+  if (
+    !passwordCriteria.length ||
+    !passwordCriteria.lowercase ||
+    !passwordCriteria.uppercase ||
+    !passwordCriteria.number ||
+    !passwordCriteria.specialChar
+  ) {
     return res.status(400).json({ message: 'Password criteria not met' });
   }
 
+  // Manually hash the password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Generate verification token
   const verificationToken = crypto.randomBytes(32).toString('hex');
-  const user = await User.create({ name, email, password, role, verificationToken });
+
+  // Create the user with hashed password
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    role,
+    verificationToken,
+  });
 
   if (user) {
+    // Send verification email
     const verificationUrl = `${process.env.API_HOST}/verify-email?token=${verificationToken}`;
-
     await sendEmail({
       to: user.email,
       subject: 'Email Verification',

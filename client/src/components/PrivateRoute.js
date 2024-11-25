@@ -1,13 +1,10 @@
-// src/components/PrivateRoute.js
-
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
-const PrivateRoute = ({ roles }) => {
-  const userInfo = useSelector(state => state.user.userInfo);
-  const token = localStorage.getItem('toten')
-  if (!userInfo && !token) {
+const PrivateRoute = ({ roles, children }) => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  if (!userInfo) {
     return <Navigate to="/login" replace />;
   }
 
@@ -15,7 +12,7 @@ const PrivateRoute = ({ roles }) => {
     return <Navigate to="/" replace />;
   }
 
-  return <Outlet />;
+  return children;
 };
 
 export default PrivateRoute;

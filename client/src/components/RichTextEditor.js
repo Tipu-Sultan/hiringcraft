@@ -1,27 +1,17 @@
 // src/components/RichTextEditor.js
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
 const RichTextEditor = ({ value, onChange }) => {
-  const editorRef = useRef(null);
-
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.setContent(value || '');
-    }
-  }, [value]);
-
-  const handleEditorChange = (content, editor) => {
-    if (onChange) {
-      onChange(content);
-    }
+  const handleEditorChange = (content) => {
+    onChange(content); // Handle content change
   };
 
   return (
     <Editor
-      onInit={(evt, editor) => (editorRef.current = editor)}
-      initialValue={value || ''}
-      apiKey={process.env.REACT_APP_EditorAPI_KEY}
+      apiKey={process.env.REACT_APP_EditorAPI_KEY} // Add your API key
+      value={value} // Directly bind value here
+      onEditorChange={handleEditorChange} // Handle content change
       init={{
         height: 300,
         menubar: true,
@@ -36,7 +26,6 @@ const RichTextEditor = ({ value, onChange }) => {
           alignleft aligncenter alignright | \
           bullist numlist outdent indent | help`,
       }}
-      onEditorChange={handleEditorChange}
     />
   );
 };

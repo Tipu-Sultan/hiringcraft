@@ -27,10 +27,12 @@ const userSlice = createSlice({
         state.loading = false;
         state.userInfo = null;
         state.message = action.payload.message;
+        state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.message = null;
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;

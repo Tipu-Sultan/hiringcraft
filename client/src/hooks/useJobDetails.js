@@ -2,60 +2,48 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { applyJob, fetchJobById } from '../services/jobService';
+import { enqueueSnackbar } from 'notistack';
+import useAuthData from './useAuthData';
 
-export const useJobDetails = () => {
+export const useDetailsAndApplyJob = () => {
   const { id } = useParams();
-  console.log(id)
   const dispatch = useDispatch();
-  const {jobs} = useSelector((state) => state?.jobs);
-  const job = jobs?.find((job) => job._id === id);
+  const user = useAuthData();
+  const [loading, setLoading] = useState(false);
+  const { jobs, getJob } = useSelector((state) => state.jobs);
+
+  const job = jobs?.find((job) => job._id === id) || getJob;
 
   useEffect(() => {
-    if (id && !job) {
+    if (id && Object.keys(job).length === 0) {
       dispatch(fetchJobById(id));
     }
-  }, [dispatch, id, job]);
+  }, [dispatch, getJob, id, job]);
 
-  return { job, id };
-};
+  const hasApplied = job?.applicants?.includes(user?._id);
 
-export const useApplyJob = (job) => {
-  const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user.userInfo);
-  const [loading, setLoading] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-
-  const hasApplied = job?.applicants?.includes(userInfo?._id);
 
   const handleApply = async (id) => {
     if (hasApplied) {
-      setSnackbarMessage('You have already applied for this job');
-      setSnackbarOpen(true);
-      return;
+      return enqueueSnackbar('You have already applied for this job');
     }
-
     setLoading(true);
 
     try {
       const response = await dispatch(
         applyJob({
           jobId: id,
-          fullName: userInfo.name,
-          email: userInfo.email,
-          phone: userInfo.phone,
+          fullName: user.name,
+          email: user.email,
+          phone: user.phone,
           message: '',
         })
       ).unwrap();
 
-      console.log('Apply Job Response:', response); 
-
-      setSnackbarMessage(response.message);
-      setSnackbarOpen(true);
+      enqueueSnackbar(response.message);
     } catch (error) {
       console.error('Error applying for job:', error);
-      setSnackbarMessage('Failed to apply for job');
-      setSnackbarOpen(true);
+      enqueueSnackbar(error || 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -63,10 +51,8 @@ export const useApplyJob = (job) => {
 
   return {
     handleApply,
-    snackbarOpen,
-    snackbarMessage,
     loading,
-    setSnackbarOpen,
     hasApplied,
+    job, getJob, id
   };
 };

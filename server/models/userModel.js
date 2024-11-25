@@ -3,10 +3,10 @@ const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    mobile: { type: String, },
-    password: { type: String, required: true },
+    name: { type: String },
+    email: { type: String, unique: true },
+    mobile: { type: String,default: '' },
+    password: { type: String },
     role: { type: String, enum: ['normal', 'employer', 'super-admin'], default: 'normal' },
     profileImage: { type: String, default: '' },
     address: { type: String, default: '' },
@@ -17,39 +17,35 @@ const userSchema = mongoose.Schema(
     otpExpires: { type: Date, default: null },
     summary: { type: String, default: '' },
     profileVisibility: [{
-      email: { type: String, required: true,default: ''},
-      mobile: { type: String, required: true,default: '' },
-      resume: { type: String, required: true,default: '' },
-      passingYear: { type: String, required: true,default: '' },
-      cgpaOrPercentage: { type: String, required: true,default: '' }
+      email: { type: String, default: ''},
+      mobile: { type: String, default: '' },
+      resume: { type: String, default: '' },
+      passingYear: { type: String, default: '' },
+      cgpaOrPercentage: { type: String, default: '' }
     }],
     education: [{
-      CourseOrBranchName: { type: String, required: true },
-      collegeOrUniversity: { type: String, required: true },
-      collegeOrUniversityAddress: { type: String, required: true },
-      passingYear: { type: String, required: true },
-      cgpaOrPercentage: { type: String, required: true }
+      CourseOrBranchName: { type: String,default: '' },
+      collegeOrUniversity: { type: String,default: '' },
+      collegeOrUniversityAddress: { type: String,default: ''},
+      passingYear: { type: String,default: '' },
+      cgpaOrPercentage: { type: String,default: '' }
     }],
     projects: [{
-      projectTitle: { type: String, required: true },
-      projectDuration: { type: String, required: true },
-      projectDescription: { type: String, required: true },
-      projectCodeOrHostLink: { type: String, required: true }
+      projectTitle: { type: String ,default: ''},
+      projectDuration: { type: String ,default: ''},
+      projectDescription: { type: String ,default: ''},
+      projectCodeOrHostLink: { type: String ,default: ''}
     }],
     experience: [{
-      companyName: { type: String, required: true },
-      jobProfile: { type: String, required: true },
-      jobType: { type: String, required: true },
-      jobDescription: { type: String, required: true }
+      companyName: { type: String,default: '' },
+      jobProfile: { type: String,default: '' },
+      jobType: { type: String,default: '' },
+      jobDescription: { type: String,default: '' }
     }],
     resumeOrCv: { type: String, default: '' }
   },
   { timestamps: true }
 );
-
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 // Ensure the password is hashed before saving the user document
 userSchema.pre('save', async function (next) {
@@ -60,6 +56,10 @@ userSchema.pre('save', async function (next) {
   this.password = bcrypt.hash(this.password, salt); 
   next();
 });
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 const User = mongoose.model('hiringcraft', userSchema);
 

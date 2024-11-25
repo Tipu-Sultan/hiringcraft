@@ -1,6 +1,6 @@
 // src/components/JobForm.js
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   TextField,
@@ -11,12 +11,14 @@ import {
   Select,
   Typography,
   Grid,
-  Paper,
+
   Box,
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { createJob, updateJob, fetchJobById } from '../services/jobService';
 import RichTextEditor from './RichTextEditor'; // Import RichTextEditor component
+import { setFormState } from '../redux/slices/jobsPostedBySlice';
+import { usePostedJobs } from '../hooks/postedJobHooks';
 
 const StyledForm = styled('form')(({ theme }) => ({
   padding: theme.spacing(3),
@@ -33,15 +35,7 @@ const JobForm = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { jobs, loading, error } = useSelector((state) => state.jobs);
-
-  const [formState, setFormState] = useState({
-    companyName: '',
-    jobTitle: '',
-    location: '',
-    experience: '',
-    description: '',
-  });
+  const { posted, formState, loading, error } = usePostedJobs(jobId)
 
   useEffect(() => {
     if (jobId) {
@@ -50,29 +44,29 @@ const JobForm = () => {
   }, [dispatch, jobId]);
 
   useEffect(() => {
-    if (jobs && jobId) {
-      setFormState({
-        companyName: jobs.companyName,
-        jobTitle: jobs.jobTitle,
-        location: jobs.location,
-        experience: jobs.experience,
-        description: jobs.description,
-      });
+    if (posted && jobId) {
+      dispatch(setFormState({
+        companyName: posted.companyName,
+        jobTitle: posted.jobTitle,
+        location: posted.location,
+        experience: posted.experience,
+        description: posted.description,
+      }));
     }
-  }, [jobs, jobId]);
+  }, [posted, jobId, dispatch]);
 
   const handleChange = (e) => {
-    setFormState({
+    dispatch(setFormState({
       ...formState,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleDescriptionChange = (content) => {
-    setFormState({
+    dispatch(setFormState({
       ...formState,
       description: content,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -87,7 +81,7 @@ const JobForm = () => {
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+
 
   return (
     <Box sx={{ mt: 4 }}>
@@ -100,7 +94,7 @@ const JobForm = () => {
             <TextField
               label="Company Name"
               name="companyName"
-              value={formState.companyName}
+              value={formState?.companyName}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -111,7 +105,7 @@ const JobForm = () => {
             <TextField
               label="Job Title"
               name="jobTitle"
-              value={formState.jobTitle}
+              value={formState?.jobTitle}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -122,7 +116,7 @@ const JobForm = () => {
             <TextField
               label="Location"
               name="location"
-              value={formState.location}
+              value={formState?.location}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -134,7 +128,7 @@ const JobForm = () => {
               <InputLabel>Experience</InputLabel>
               <Select
                 name="experience"
-                value={formState.experience}
+                value={formState?.experience}
                 onChange={handleChange}
               >
                 <MenuItem value="Fresher">Fresher</MenuItem>
@@ -150,9 +144,13 @@ const JobForm = () => {
             </Typography>
             {/* Use RichTextEditor for rich text editing */}
             <RichTextEditor
-              value={formState.description}
+              value={formState?.description}
               onChange={handleDescriptionChange}
+              localization={{ locale: 'en' }} // Example for English
             />
+
+
+
           </Grid>
           <Grid item xs={12}>
             <Button

@@ -5,9 +5,11 @@ const jobSlice = createSlice({
   name: 'jobs',
   initialState: {
     jobs: [],
+    getJob:{},
+    appliedJobs:[],
     loading: false,
     error: null,
-    applicants: [],
+    message: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -32,9 +34,9 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobById.fulfilled, (state, action) => {
         state.loading = false;
-        state.jobs = action.payload;
+        state.getJob = action.payload;
         state.error = null;
-      })
+      })      
       .addCase(fetchJobById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
@@ -46,11 +48,17 @@ const jobSlice = createSlice({
       .addCase(applyJob.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.jobs.applicants.push(action.payload.applicant);
-      })
+        // Find the job by ID and update its applicants
+        const jobIndex = state.jobs.findIndex(job => job._id === action.payload.jobId);
+        if (jobIndex !== -1) {
+          state.jobs[jobIndex].applicants.push(action.payload.userId);
+          state.appliedJobs.push(action.payload.appliedJobData[0]);
+        }
+        state.message = action.payload.message;
+      })      
       .addCase(applyJob.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload.error;
       })
 
       .addCase(fetchAppliedJobs.pending, (state) => {
@@ -69,9 +77,17 @@ const jobSlice = createSlice({
         state.loading = true;
       })
       .addCase(cancelJobApplication.fulfilled, (state, action) => {
-        state.loading = false;
-        state.appliedJobs = state.appliedJobs.filter(job => job._id !== action.payload.jobId);
-      })
+        state.loading = false;      
+        state.appliedJobs = state.appliedJobs.filter(appid => appid._id !== action.payload.jobId);
+        // Find the job in the jobs array and update its applicants
+        const jobIndex = state.jobs.findIndex(job => job._id === action.payload.jobId);
+        if (jobIndex !== -1) {
+          state.jobs[jobIndex].applicants = state.jobs[jobIndex].applicants.filter(
+            applicantId => applicantId !== action.payload.userId
+          );
+        }
+        state.message = action.payload.message;
+      })            
       .addCase(cancelJobApplication.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

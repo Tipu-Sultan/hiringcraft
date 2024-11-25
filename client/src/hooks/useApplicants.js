@@ -4,8 +4,7 @@ import { fetchJobApplicants } from '../services/jobService';
 
 export const useApplicants = (jobId) => {
   const dispatch = useDispatch();
-  const applicants = useSelector((state) => state.postedBy.postedBy);
-  console.log(applicants)
+  const applicants = useSelector((state) => state.postedBy.applicants);
   const loading = useSelector((state) => state.postedBy.loading);
   const error = useSelector((state) => state.postedBy.error);
 

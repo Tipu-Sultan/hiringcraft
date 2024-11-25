@@ -177,6 +177,6 @@ export const applyJob = createAsyncThunk('jobs/applyJob', async (jobApplicationD
         const { data } = await axios.post(`${process.env.REACT_APP_API_HOST}/api/jobs/apply`, jobApplicationData, config);
         return data;
     } catch (error) {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.error);
     }
 });

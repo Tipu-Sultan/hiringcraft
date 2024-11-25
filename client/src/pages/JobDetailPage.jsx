@@ -6,23 +6,22 @@ import {
   CardContent,
   CardMedia,
   Button,
-  Snackbar,
   Box,
   Grid,
   Paper,
 } from '@mui/material';
-import { useJobDetails, useApplyJob } from '../hooks/useJobDetails';
+import { useDetailsAndApplyJob } from '../hooks/useJobDetails';
 
 const JobDetailPage = () => {
-  const { job, id } = useJobDetails();
+
   const {
     handleApply,
-    snackbarOpen,
-    snackbarMessage,
     loading,
-    setSnackbarOpen,
+    job,
+    id,
     hasApplied,
-  } = useApplyJob(job);
+  } = useDetailsAndApplyJob();
+
 
   return (
     <Box mt={4}>
@@ -34,7 +33,7 @@ const JobDetailPage = () => {
                 onClick={() => handleApply(id)}
                 variant="contained"
                 color="primary"
-                disabled={loading || hasApplied}
+                disabled={ hasApplied}
                 sx={{ width: '100%', py: 1.5, mb: 2 }}
               >
                 {loading ? 'Applying...' : hasApplied ? 'Applied' : 'Apply Now'}
@@ -79,13 +78,6 @@ const JobDetailPage = () => {
               >
                 {loading ? 'Applying...' : hasApplied ? 'Applied' : 'Apply Now'}
               </Button>
-
-              <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={() => setSnackbarOpen(false)}
-                message={snackbarMessage}
-              />
             </Grid>
 
             <Grid item xs={12} md={4}>

@@ -142,38 +142,48 @@ const cancelJobApplication = asyncHandler(async (req, res) => {
   await user.save();
   await job.save();
 
-  res.json({ jobId: jobIdToDelete, message: 'Job application cancelled successfully' });
+  res.json({userId, jobId: jobIdToDelete, message: 'Job application cancelled successfully' });
 });
-
 
 const applyForJob = asyncHandler(async (req, res) => {
   const { jobId, fullName, email, phone, message } = req.body;
 
+  // Find the job by jobId
   const job = await Job.findById(jobId);
-  const user = await User.findById(req.user._id);
+
+  // Retrieve the user from the authenticated request
+  const user = await User.findById(req.user._id);  // Assuming the logged-in user's info is in req.user
 
   if (!job) {
     res.status(404);
     throw new Error('Job not found');
   }
 
-  // Assuming req.user contains the logged-in user information
-  const applicant = req.user._id;
-
   // Check if user has already applied
-  if (job.applicants.includes(applicant)) {
-    res.status(400);
-    throw new Error('You have already applied for this job');
+  if (job.applicants.includes(req.user._id)) {
+    return res.status(404).json({error:'You have already applied for this job'});
   }
 
-  // Add applicant to job's applicants array
-  job.applicants.push(applicant);
+  // Add applicant to the job's applicants array
+  job.applicants.push(req.user._id);
+  // Add jobId to the user's appliedJobs array
   user.appliedJobs.push(jobId);
+
+  // Save the updated job and user
   await job.save();
   await user.save();
 
-  res.status(201).json({ jobId,applicant, message: 'Job application submitted successfully' });
+  // Populate the appliedJobs field and return relevant details
+  const populatedUser = await User.findById(req.user._id).populate('appliedJobs', 'companyName jobTitle location');
+
+  res.status(201).json({
+    jobId,
+    userId: req.user._id,
+    appliedJobData: populatedUser.appliedJobs,
+    message: 'Job application submitted successfully',
+  });
 });
+
 
 const viewApplicants = asyncHandler(async (req, res) => {
   try {

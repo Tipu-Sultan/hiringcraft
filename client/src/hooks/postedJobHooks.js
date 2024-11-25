@@ -2,37 +2,34 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteJob, fetchJobspostedBy } from '../services/jobService';
 
-export const usePostedJobs = (postedBy) => {
+export const usePostedJobs = (postedId) => {
   const dispatch = useDispatch();
-  const jobs = useSelector((state) => state.postedBy.postedBy);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const {postedBy,getJob,formState,loading,error} = useSelector((state) => state.postedBy);
+  const posted = postedBy.find(job => job._id===postedId) || getJob;
 
   useEffect(() => {
-    dispatch(fetchJobspostedBy(postedBy));
-  }, [dispatch,postedBy]);
+    if(postedBy.length===0){
+      dispatch(fetchJobspostedBy(postedId));
+    }
+  }, [dispatch, postedBy.length, postedId]);
 
   const handleDeleteJob = async (jobId) => {
     try {
       dispatch(deleteJob(jobId));
-      setSnackbarMessage('Job deleted successfully');
-      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error deleting job:', error);
-      setSnackbarMessage('Failed to delete job');
-      setSnackbarOpen(true);
+
     }
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+ 
 
   return {
-    jobs,
-    snackbarOpen,
-    snackbarMessage,
+    postedBy,
+    posted,
+    formState,
+    loading,
+    error,
     handleDeleteJob,
-    handleSnackbarClose,
   };
 };
