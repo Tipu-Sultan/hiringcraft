@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 
 const PrivateRoute = ({ roles }) => {
   const userInfo = useSelector(state => state.user.userInfo);
-
-  if (!userInfo) {
+  const token = localStorage.getItem('toten')
+  if (!userInfo && !token) {
     return <Navigate to="/login" replace />;
   }
 

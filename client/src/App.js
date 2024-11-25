@@ -42,16 +42,13 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+
 
           <Route path="/" element={<PrivateRoute />}>
             <Route index element={<RoleBasedPage />} />
           </Route>
 
-
-
-          <Route path="/verify-email" element={<PrivateRoute roles={['employer', 'normal', 'super-admin']} />} >
-            <Route element={<VerifyEmailPage mode="verify" />} />
-          </Route>
 
           <Route path="/chat" element={<PrivateRoute roles={['employer', 'normal']} />}>
             <Route element={<ChatPage mode="chat" />} />
