@@ -16,7 +16,15 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
+const allowedOrigins = ['https://hiringcraft.vercel.app','http://localhost:3000'];
+
+app.use(
+  cors({
+    origin: allowedOrigins,  // Only allow requests from this origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // Routes
 app.use('/api/users', userRoutes);
